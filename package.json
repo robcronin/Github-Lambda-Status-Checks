@@ -1,0 +1,34 @@
+{
+    "name": "aws-github-webhook-listener",
+    "version": "1.0.0",
+    "description": "Extend your github repositories with this github webhook listener",
+    "main": "handler.js",
+    "scripts": {
+        "deploy": "serverless deploy",
+        "logs": "serverless logs -f githubWebhookListener -t"
+    },
+    "author": "David Wells",
+    "license": "MIT",
+    "dependencies": {
+        "aws-sdk": "^2.211.0",
+        "axios": "^0.18.0",
+        "babel-loader": "^7.1.4",
+        "babel-plugin-transform-runtime": "^6.23.0",
+        "babel-preset-env": "^1.6.1",
+        "babel-preset-stage-3": "^6.24.1",
+        "babel-runtime": "^6.26.0",
+        "serverless-webpack": "^5.1.0",
+        "webpack": "3.11.0",
+        "webpack-node-externals": "1.6.0"
+    },
+    "devDependencies": {
+        "babel-core": "^6.26.0",
+        "babel-loader": "^7.1.4",
+        "babel-plugin-transform-runtime": "^6.23.0",
+        "babel-preset-env": "^1.6.1",
+        "babel-preset-stage-3": "^6.24.1",
+        "serverless-webpack": "^5.1.0",
+        "webpack": "^3.11.0",
+        "webpack-node-externals": "^1.6.0"
+    }
+}
