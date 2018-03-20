@@ -74,9 +74,12 @@
 ## Tweak it
 
 - In [handler.js](./handler.js) add your own rules from line 100 and redeploy
+- To see all the information that the GitHub response provides:
+  - add a `console.log(event.body)` to [handler.js](./handler.js)
+  - trigger an event and see the logs by running `serverless logs -f githubWebhookListener -t`
 
 
 # References
 
-- [Github webhook listner Source](https://github.com/serverless/examples/tree/master/aws-node-github-webhook-listener)
+- [Github Webhook Listener](https://github.com/serverless/examples/tree/master/aws-node-github-webhook-listener)
 - [Support for ES6/ES7 Javascript](https://serverless-stack.com/chapters/add-support-for-es6-es7-javascript.html)
