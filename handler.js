@@ -103,7 +103,7 @@ module.exports.githubWebhookListener = (event, context, callback) => {
         prName.includes('#')
 
 
-      if (prValid || pipValid) {
+      if (prValid) {
         postResult(
           url,
           githubToken,
@@ -115,7 +115,7 @@ module.exports.githubWebhookListener = (event, context, callback) => {
           url,
           githubToken,
           'failure',
-          'PR Title format: (NAME #123) AAC I love my user experience'
+          'PR Title format: (ROBC #123) AAC I love this site'
         );
       }
 
