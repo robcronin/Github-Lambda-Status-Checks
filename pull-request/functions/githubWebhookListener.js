@@ -16,24 +16,24 @@ const postResult = (url, githubToken, status, message) => {
     {
       state: status,
       description: message,
-      context: 'Pull Request Name Check'
+      context: 'Pull Request Name Check',
     },
     {
       headers: {
         Accept: 'application/vnd.github.v3+json',
-        Authorization: `token ${githubToken}`
-      }
-    }
+        Authorization: `token ${githubToken}`,
+      },
+    },
   );
 };
 export default (event, context, callback) => {
   var errMsg; // eslint-disable-line
-  const headers = event.headers;
+  const { headers } = event;
   const sig = headers['X-Hub-Signature'];
   const githubEvent = headers['X-GitHub-Event'];
   const id = headers['X-GitHub-Delivery'];
-  return getSSMParameters(['github_token', 'github_webhook_secret']).then(
-    tokens => {
+  return getSSMParameters(['github_token', 'github_webhook_secret'])
+    .then((tokens) => {
       const githubToken = tokens[0];
       const webhookToken = tokens[1];
 
@@ -44,7 +44,7 @@ export default (event, context, callback) => {
         return callback(null, {
           statusCode: 401,
           headers: { 'Content-Type': 'text/plain' },
-          body: errMsg
+          body: errMsg,
         });
       }
 
@@ -53,7 +53,7 @@ export default (event, context, callback) => {
         return callback(null, {
           statusCode: 401,
           headers: { 'Content-Type': 'text/plain' },
-          body: errMsg
+          body: errMsg,
         });
       }
 
@@ -62,7 +62,7 @@ export default (event, context, callback) => {
         return callback(null, {
           statusCode: 422,
           headers: { 'Content-Type': 'text/plain' },
-          body: errMsg
+          body: errMsg,
         });
       }
 
@@ -71,7 +71,7 @@ export default (event, context, callback) => {
         return callback(null, {
           statusCode: 401,
           headers: { 'Content-Type': 'text/plain' },
-          body: errMsg
+          body: errMsg,
         });
       }
 
@@ -81,7 +81,7 @@ export default (event, context, callback) => {
         return callback(null, {
           statusCode: 401,
           headers: { 'Content-Type': 'text/plain' },
-          body: errMsg
+          body: errMsg,
         });
       }
 
@@ -89,18 +89,7 @@ export default (event, context, callback) => {
       // For more on events see https://developer.github.com/v3/activity/events/types/
 
       const jsonBody = JSON.parse(event.body);
-
-      const owner = jsonBody.pull_request.head.repo.owner.login;
-      const repo = jsonBody.pull_request.head.repo.name;
-      const sha = jsonBody.pull_request.head.sha;
-      const url =
-        'https://api.github.com/repos/' +
-        owner +
-        '/' +
-        repo +
-        '/statuses/' +
-        sha;
-
+      const url = jsonBody.pull_request.statuses_url;
       const prName = jsonBody.pull_request.title;
 
       // checks PR name is of correct format
@@ -111,25 +100,24 @@ export default (event, context, callback) => {
           url,
           githubToken,
           'success',
-          'Your PR title is of the correct format!'
+          'Your PR title is of the correct format!',
         );
       } else {
         postResult(
           url,
           githubToken,
           'failure',
-          'PR Title format: (ROBC #123) AAC I love this site'
+          'PR Title format: (ROBC #123) AAC I love this site',
         );
       }
 
       const response = {
         statusCode: 200,
         body: JSON.stringify({
-          input: event
-        })
+          input: event,
+        }),
       };
 
       return callback(null, response);
-    }
-  );
+    });
 };
