@@ -97,11 +97,11 @@ export default (event, context, callback) => {
       }
 
 
-      // checks time is ok (Note: accounting for (Summer) Daylight Saving here)
+      // checks time is ok (Note: need to account for Daylight Saving here)
       const date = new Date(jsonBody.pull_request.updated_at);
       const hour = date.getHours();
 
-      if (hour >= 17 || hour < 9) {
+      if (hour >= 15 || hour < 7) {
         postResult(
           url,
           githubToken,

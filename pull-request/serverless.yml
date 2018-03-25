@@ -27,13 +27,15 @@ functions:
           path: webhook
           method: post
           cors: true
+  # Need to account for Daylight Saving
   githubBlockedStatus:
     handler: handler.githubBlockedStatus
     description: Blocks production pull requests between 4pm-8am
     events:
-      - schedule: cron(00 16 ? * MON-FRI *)
+      - schedule: cron(00 15 ? * MON-FRI *)
+  # Need to account for Daylight Saving      
   githubUnblockedStatus:
     handler: handler.githubUnblockedStatus
     description: Unblocks production pull requests between 8am-4pm
     events:
-      - schedule: cron(00 08 ? * MON-FRI *)
+      - schedule: cron(00 07 ? * MON-FRI *)
