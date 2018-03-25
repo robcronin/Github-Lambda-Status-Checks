@@ -1,7 +1,6 @@
-
-import axios from 'axios';
 import crypto from 'crypto';
 import getSSMParameters from '../tools/ssm';
+import postResult from '../tools/postResult';
 
 function signRequestBody(key, body) {
   return `sha1=${crypto
@@ -10,22 +9,6 @@ function signRequestBody(key, body) {
     .digest('hex')}`;
 }
 
-const postResult = (url, githubToken, status, message) => {
-  axios.post(
-    url,
-    {
-      state: status,
-      description: message,
-      context: 'Pull Request Name Check',
-    },
-    {
-      headers: {
-        Accept: 'application/vnd.github.v3+json',
-        Authorization: `token ${githubToken}`,
-      },
-    },
-  );
-};
 export default (event, context, callback) => {
   var errMsg; // eslint-disable-line
   const { headers } = event;
@@ -99,6 +82,7 @@ export default (event, context, callback) => {
         postResult(
           url,
           githubToken,
+          'Pull Request Name Check',
           'success',
           'Your PR title is of the correct format!',
         );
@@ -106,6 +90,7 @@ export default (event, context, callback) => {
         postResult(
           url,
           githubToken,
+          'Pull Request Name Check',
           'failure',
           'PR Title format: (ROBC #123) AAC I love this site',
         );
