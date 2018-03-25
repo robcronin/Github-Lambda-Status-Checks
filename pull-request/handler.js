@@ -1,5 +1,5 @@
 import githubWebhookListener from './functions/githubWebhookListener';
 
-export default {
+export {
   githubWebhookListener,
 };
