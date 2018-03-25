@@ -1,4 +1,4 @@
-service: github-status-checks
+service: github-lambda-status-checks
 
 # Use serverless-webpack plugin to transpile ES6/ES7
 plugins:
@@ -27,3 +27,13 @@ functions:
           path: webhook
           method: post
           cors: true
+  githubBlockedStatus:
+    handler: handler.githubBlockedStatus
+    description: Blocks production pull requests between 4pm-8am
+    events:
+      - schedule: cron(00 16 ? * MON-FRI *)
+  githubUnblockedStatus:
+    handler: handler.githubUnblockedStatus
+    description: Unblocks production pull requests between 8am-4pm
+    events:
+      - schedule: cron(00 08 ? * MON-FRI *)
