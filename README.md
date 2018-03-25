@@ -21,15 +21,13 @@
 ## Command Line
 
 - Clone this repo: `git clone git@github.com:robcronin/pr-name-checker.git`
-- Install serverless if you haven't already: `npm install -g serverless`
 - Run `yarn`
-- Add dev dependencies `yarn add -d babel-core babel-loader babel-plugin-transform-runtime babel-preset-env babel-preset-stage-3 serverless-webpack webpack@3.11.0 webpack-node-externals@1.6.0`
-- Deploy your lambda with `serverless deploy`
+- Deploy your lambda with `serverless deploy` or `yarn deploy`
 - Copy the endpoint that prints after a successful deployment
 
 ## Github Config
 
-- You will need a github token to post on your behalf and to generate a webhook token 
+- You will need a github token to post on your behalf and will also need to generate a webhook token 
 
 **Github Token**
 
@@ -73,9 +71,9 @@
 
 ## Tweak it
 
-- In [handler.js](./handler.js) add your own rules from line 100 and redeploy
+- In [githubWebhookListener.js](./pull-request/functions/githubWebhookListener.js#95) add your own rules from line 95 and redeploy
 - To see all the information that the GitHub response provides:
-  - add a `console.log(event.body)` to [handler.js](./handler.js)
+  - add a `console.log(event.body)` to [githubWebhookListener.js](./pull-request/functions/githubWebhookListener.js)
   - trigger an event and see the logs by running `serverless logs -f githubWebhookListener -t`
 
 
