@@ -1,6 +1,6 @@
 import axios from 'axios';
 import crypto from 'crypto';
-import getSSMParameters from './tools/ssm';
+import getSSMParameters from '../tools/ssm';
 
 function signRequestBody(key, body) {
   return `sha1=${crypto
