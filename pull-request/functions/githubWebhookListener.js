@@ -1,5 +1,4 @@
 import crypto from 'crypto';
-import Regex from 'regex';
 import getSSMParameters from '../tools/ssm';
 import postResult from '../tools/postResult';
 
