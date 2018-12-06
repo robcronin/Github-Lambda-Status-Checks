@@ -1,4 +1,5 @@
 import crypto from 'crypto';
+import Regex from 'regex';
 import getSSMParameters from '../tools/ssm';
 import postResult from '../tools/postResult';
 
@@ -95,36 +96,6 @@ export default (event, context, callback) => {
           'PR Title format: (ROBC #123) AAC I love this site',
         );
       }
-
-
-      // checks time is ok (Note: need to account for Daylight Saving here)
-      const date = new Date(jsonBody.pull_request.updated_at);
-      const hour = date.getHours();
-
-      if (hour >= 15 || hour < 7) {
-        postResult(
-          url,
-          githubToken,
-          'Time of Day Check',
-          'pending',
-          'You can\'t merge to production between 4pm-8am',
-        );
-      } else {
-        postResult(
-          url,
-          githubToken,
-          'Time of Day Check',
-          'success',
-          'You can merge at this time',
-        );
-      }
-
-      const response = {
-        statusCode: 200,
-        body: JSON.stringify({
-          input: event,
-        }),
-      };
 
       return callback(null, response);
     });
