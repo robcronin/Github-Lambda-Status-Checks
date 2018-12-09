@@ -82,7 +82,7 @@ export default (event, context, callback) => {
         postResult(
           url,
           githubToken,
-          'Pull Request Name Check',
+          'Pull Request Name Check testing',
           'success',
           'Your PR title is of the correct format!',
         );
