@@ -14,6 +14,7 @@ const statusCheckRepo = (repo, githubToken, status, message) => {
     headers: {
       Accept: 'application/vnd.github.v3+json',
       Authorization: `token ${githubToken}`,
+
     },
   })
     .then((response) => {
