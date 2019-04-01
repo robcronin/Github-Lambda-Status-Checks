@@ -124,6 +124,7 @@ Anytime you create or modify a pull request we want to activate the lambda. Gith
 - Generally when you redeploy, the endpoint will remain the same. However, I noticed on the odd occassion it will change and you will have to update your repo webhooks. I haven't figured out under what circumstances this occurs for yet
 - Statuses are tied to given commits, not given pull requests. Therefore if you have multiple pull requests open for the same branch (e.g. staging and production) then the status will apply to both. However if you don't set the time check as Required on staging then it won't block merging to staging
 - If you set the status `Time of Day Check` to 'Required' then any new pull request can not be merged until it passes this check, which won't be until 8am the next day... To overcome [githubWebhookListener.js](./pull-request/functions/githubWebhookListener.js#104) checks the time of the pull request event listener so that any new pull request can pass/fail the time check as expected
+- You must make sure to include your Parameter Store credentials and your lambda stack in the same AWS region (eg eu-west-1 for Dublin, eu-west-2 for London) 
 
 
 # References
