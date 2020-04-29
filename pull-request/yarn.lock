@@ -743,9 +743,9 @@ atob@^2.0.0:
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/atob/-/atob-2.1.2.tgz#6d9517eb9e030d2436666651e86bd9f6f13533c9"
 
-aws-sdk@^2.660.0, aws-sdk@^2.664.0:
-  version "2.664.0"
-  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.664.0.tgz#d0abfc446cb4aa2dafe5d1febb73469c4cb30849"
+aws-sdk@^2.660.0, aws-sdk@^2.665.0:
+  version "2.665.0"
+  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.665.0.tgz#5f2fd304c911a67c9e1202194ae59d5b2a2cd8ba"
   dependencies:
     buffer "4.9.1"
     events "1.1.1"
