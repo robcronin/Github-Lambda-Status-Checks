@@ -5960,16 +5960,16 @@ serialize-javascript@^2.1.2:
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/serialize-javascript/-/serialize-javascript-2.1.2.tgz#ecec53b0e0317bdc95ef76ab7074b7384785fa61"
 
-serverless-webpack@^5.3.2:
-  version "5.3.2"
-  resolved "https://registry.yarnpkg.com/serverless-webpack/-/serverless-webpack-5.3.2.tgz#33368c65e8d017e737294f33f382b797c53e6ca9"
+serverless-webpack@^5.3.3:
+  version "5.3.3"
+  resolved "https://registry.yarnpkg.com/serverless-webpack/-/serverless-webpack-5.3.3.tgz#d474f9c1a3a5a7d1390606ae4c8080e245864904"
   dependencies:
     archiver "^3.0.3"
     bluebird "^3.5.5"
     fs-extra "^8.1.0"
     glob "^7.1.4"
     is-builtin-module "^3.0.0"
-    lodash "^4.17.15"
+    lodash "^4.17.19"
     semver "^6.2.0"
     ts-node "^8.3.0"
 
