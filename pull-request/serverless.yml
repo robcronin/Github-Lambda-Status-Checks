@@ -1,0 +1,41 @@
+service: github-lambda-status-checks
+
+# Use serverless-webpack plugin to transpile ES6/ES7
+plugins:
+  - serverless-webpack
+
+# Enable auto-packing of external modules
+custom:
+  webpackIncludeModules: true
+
+provider:
+  name: aws
+  runtime: nodejs6.10
+  region: eu-west-1
+  profile: robc@theodo.co.uk
+  iamRoleStatements:
+    - Effect: Allow
+      Action: ssm:GetParameters
+      Resource: '*'
+
+functions:
+  githubWebhookListener:
+    handler: handler.githubWebhookListener
+    description: Listens for pull request events and checks titles
+    events:
+      - http:
+          path: webhook
+          method: post
+          cors: true
+  # Need to account for Daylight Saving
+  githubBlockedStatus:
+    handler: handler.githubBlockedStatus
+    description: Blocks production pull requests between 4pm-8am
+    events:
+      - schedule: cron(00 15 ? * MON-FRI *)
+  # Need to account for Daylight Saving      
+  githubUnblockedStatus:
+    handler: handler.githubUnblockedStatus
+    description: Unblocks production pull requests between 8am-4pm
+    events:
+      - schedule: cron(00 07 ? * MON-FRI *)

@@ -1,6 +1,6 @@
-import axios from 'axios';
 import crypto from 'crypto';
-import getSSMParameters from './tools/ssm';
+import getSSMParameters from '../tools/ssm';
+import postResult from '../tools/postResult';
 
 function signRequestBody(key, body) {
   return `sha1=${crypto
@@ -9,31 +9,14 @@ function signRequestBody(key, body) {
     .digest('hex')}`;
 }
 
-const postResult = (url, githubToken, status, message) => {
-  axios.post(
-    url,
-    {
-      state: status,
-      description: message,
-      context: 'Pull Request Name Check'
-    },
-    {
-      headers: {
-        Accept: 'application/vnd.github.v3+json',
-        Authorization: `token ${githubToken}`
-      }
-    }
-  );
-};
-
-module.exports.githubWebhookListener = (event, context, callback) => {
+export default (event, context, callback) => {
   var errMsg; // eslint-disable-line
-  const headers = event.headers;
+  const { headers } = event;
   const sig = headers['X-Hub-Signature'];
   const githubEvent = headers['X-GitHub-Event'];
   const id = headers['X-GitHub-Delivery'];
-  return getSSMParameters(['github_token', 'github_webhook_secret']).then(
-    tokens => {
+  return getSSMParameters(['github_token', 'github_webhook_secret'])
+    .then((tokens) => {
       const githubToken = tokens[0];
       const webhookToken = tokens[1];
 
@@ -44,7 +27,7 @@ module.exports.githubWebhookListener = (event, context, callback) => {
         return callback(null, {
           statusCode: 401,
           headers: { 'Content-Type': 'text/plain' },
-          body: errMsg
+          body: errMsg,
         });
       }
 
@@ -53,7 +36,7 @@ module.exports.githubWebhookListener = (event, context, callback) => {
         return callback(null, {
           statusCode: 401,
           headers: { 'Content-Type': 'text/plain' },
-          body: errMsg
+          body: errMsg,
         });
       }
 
@@ -62,7 +45,7 @@ module.exports.githubWebhookListener = (event, context, callback) => {
         return callback(null, {
           statusCode: 422,
           headers: { 'Content-Type': 'text/plain' },
-          body: errMsg
+          body: errMsg,
         });
       }
 
@@ -71,7 +54,7 @@ module.exports.githubWebhookListener = (event, context, callback) => {
         return callback(null, {
           statusCode: 401,
           headers: { 'Content-Type': 'text/plain' },
-          body: errMsg
+          body: errMsg,
         });
       }
 
@@ -81,7 +64,7 @@ module.exports.githubWebhookListener = (event, context, callback) => {
         return callback(null, {
           statusCode: 401,
           headers: { 'Content-Type': 'text/plain' },
-          body: errMsg
+          body: errMsg,
         });
       }
 
@@ -89,44 +72,60 @@ module.exports.githubWebhookListener = (event, context, callback) => {
       // For more on events see https://developer.github.com/v3/activity/events/types/
 
       const jsonBody = JSON.parse(event.body);
-
-      const owner = jsonBody.pull_request.head.repo.owner.login;
-      const repo = jsonBody.pull_request.head.repo.name;
-      const sha = jsonBody.pull_request.head.sha;
-      const url = 'https://api.github.com/repos/' + owner + '/' + repo + '/statuses/' + sha;
-
+      const url = jsonBody.pull_request.statuses_url;
       const prName = jsonBody.pull_request.title;
 
       // checks PR name is of correct format
-      const prValid =
-        prName.includes('ROBC') &&
-        prName.includes('#')
+      const prValid = prName.includes('ROBC') && prName.includes('#');
 
-
-      if (prValid || pipValid) {
+      if (prValid) {
         postResult(
           url,
           githubToken,
+          'Pull Request Name Check',
           'success',
-          'Your PR title is of the correct format!'
+          'Your PR title is of the correct format!',
         );
       } else {
         postResult(
           url,
           githubToken,
+          'Pull Request Name Check',
           'failure',
-          'PR Title format: (NAME #123) AAC I love my user experience'
+          'PR Title format: (ROBC #123) AAC I love this site',
+        );
+      }
+
+
+      // checks time is ok (Note: need to account for Daylight Saving here)
+      const date = new Date(jsonBody.pull_request.updated_at);
+      const hour = date.getHours();
+
+      if (hour >= 15 || hour < 7) {
+        postResult(
+          url,
+          githubToken,
+          'Time of Day Check',
+          'pending',
+          'You can\'t merge to production between 4pm-8am',
+        );
+      } else {
+        postResult(
+          url,
+          githubToken,
+          'Time of Day Check',
+          'success',
+          'You can merge at this time',
         );
       }
 
       const response = {
         statusCode: 200,
         body: JSON.stringify({
-          input: event
-        })
+          input: event,
+        }),
       };
 
       return callback(null, response);
-    }
-  );
+    });
 };
